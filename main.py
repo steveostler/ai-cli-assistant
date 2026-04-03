@@ -88,6 +88,28 @@ def search_logs(logs, keyword):
 
     return matches
 
+def print_last_conversations(logs, count=3):
+    """
+    Displays the last N conversations from the logs.
+    Includes timestamp, prompt, response, model, and role.
+    """
+    if not logs:
+        print("No previous conversations today.\n")
+        return
+
+    print(f"\nLast {count} conversations:")
+    print("-" * 30)
+
+    for entry in logs[-count:]:
+        print(f"Time:     {entry.get('timestamp', 'Unknown')}")
+        print(f"Model:    {entry.get('model', 'Unknown')}")
+        print(f"Role:     {entry.get('role', 'Unknown')}")
+        print(f"Prompt:   {entry.get('prompt', '')}")
+        print(f"Response: {entry.get('response', '')}")
+        print("-" * 30)
+
+    print()
+
 
 # --- Log setup ---
 # Create a date-based filename (one log file per day)
@@ -97,18 +119,7 @@ log_file = f"chatlog_{today}.json"
 # Load existing logs
 logs = load_logs(log_file)
 
-# Print last 3 conversations at startup
-if logs:
-    print("\nLast 3 conversations:")
-    print("-" * 30)
-    for entry in logs[-3:]:
-        print(f"Time:     {entry.get('timestamp', 'Unknown')}")
-        print(f"Prompt:   {entry.get('prompt', '')}")
-        print(f"Response: {entry.get('response', '')}")
-        print("-" * 30)
-    print()
-else:
-    print("No previous conversations today.\n")
+print_last_conversations(logs, 5)
 
 #  ---Main loop---
 
